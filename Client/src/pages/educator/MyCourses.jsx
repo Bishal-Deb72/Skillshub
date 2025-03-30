@@ -1,19 +1,41 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
 import Loading from '../../components/student/Loading'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 function MyCourses() {
-  const {currency, allCourses} = useContext(AppContext)
+  const {currency, backendUrl , isEducator, getToken} = useContext(AppContext)
 
   const [courses, setCourses] = useState(null)
 
-  const fetchEducatorCoursrs = async () => {
-    setCourses(allCourses)
-  }
+  const fetchEducatorCourses = async () => {
+    try {
+        const token = await getToken();
+        const { data } = await axios.get(backendUrl + '/api/educator/courses', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+
+        if (data.success) {
+            setCourses(data.courses);
+        } else {
+            toast.error("Failed to fetch courses");
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        toast.error(error.response?.data?.message || error.message || "Something went wrong");
+      }
+  };
 
   useEffect(() => {
-    fetchEducatorCoursrs()
-  },[])
+      if (isEducator) {
+          (async () => {
+              await fetchEducatorCourses();
+          })();
+      }
+  }, [isEducator]);
+
 
   return courses ? (
     <div className='h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>

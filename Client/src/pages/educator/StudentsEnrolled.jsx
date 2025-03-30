@@ -1,17 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { dummyStudentEnrolled } from '../../assets/assets';
 import Loading from '../../components/student/Loading';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function StudentsEnrolled() {
+
+  const {backendUrl, getToken, isEducator} = useContext(AppContext)
   const [enrolledStudents, setEnrolledStudents] = useState(null);
 
   const fetchEnrollStudents = async () => {
-    setEnrolledStudents(dummyStudentEnrolled);
+    try {
+      const token = await getToken();
+      const {data} = await axios.get(backendUrl + '/api/educator/enrolled-students',{headers:{Authorization:`Bearer ${token}`}})
+
+      console.log("enrolled stu => ", data)
+
+      if(data.success){
+        setEnrolledStudents(data.enrolledStudents.reverse())
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
 
   useEffect(() => {
-    fetchEnrollStudents();
-  }, []);
+    if(isEducator){
+      fetchEnrollStudents();
+    }
+   
+  }, [isEducator]);
 
   return enrolledStudents ? (
     <div className='min-h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
@@ -39,7 +60,7 @@ function StudentsEnrolled() {
                 </td>
                 <td className='px-4 py-3 truncate'>{item.courseTitle}</td>
                 <td className='px-4 py-3 hidden sm:table-cell'>
-                  {new Date(item.purchaseDate).toLocaleDateString()}
+                {item.purchaseData ? new Date(item.purchaseData).toLocaleDateString() : "N/A"}
                 </td>
               </tr>
             ))}

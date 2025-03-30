@@ -13,7 +13,7 @@ export const getUserData = async (req, res) => {
             return res.json({success:false, message:'User not found'})
         }
 
-        res.json({message:true, user})
+        res.json({success:true, user})
 
     } catch (error) {
         res.json({success:false, message:error.message})
@@ -116,9 +116,14 @@ export const updateUserCourseProgress = async (req,res) => {
 
 export const getUserCourseProgress = async(req,res) => {
     try {
-        const userId = req.auth.userId
-        const {courseId} = req.body
+        const userId = req.auth.userId;
+        const { courseId } = req.body;
+        
+        console.log("userId",userId)
+        
         const progressData = await CourseProgress.findOne({userId, courseId})
+        console.log("CourseId",courseId)
+        console.log(progressData)
         res.json({
             success:true, progressData
         })

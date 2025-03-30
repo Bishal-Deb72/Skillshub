@@ -1,33 +1,32 @@
 import mongoose from "mongoose";
 
 const lectureSchema = new mongoose.Schema({
-    lectureId : {
-        typeId:{
-            type: String,
-            required: true
-        },
-        lectureTitle:{
-            type: String,
-            required: true
-        },
-        lectureDescription:{
-            type: String,
-            required: true
-        },
-        lectureUrl:{
-            type:String,
-            required: true
-        },
-        isPreviewFree:{
-            type:Boolean,
-            required:true
-        },
-        lectureOrder:{
-            type:Number,
-            required:true
-        }
+    // typeId: {
+    //     type: String,
+    //     required: true
+    // },
+    lectureTitle: {
+        type: String,
+        required: true
+    },
+    // lectureDescription: {
+    //     type: String,
+    //     required: true
+    // },
+    lectureUrl: {
+        type: String,
+        required: true
+    },
+    isPreviewFree: {
+        type: Boolean,
+        required: true
+    },
+    lectureOrder: {
+        type: Number,
+        required: true
     }
-},{_id:false})
+}, { _id: false });
+
 
 const chapterSchema = new mongoose.Schema({
     chapterId:{
