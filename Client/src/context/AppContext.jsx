@@ -1,5 +1,4 @@
 import { createContext, useEffect } from "react";
-import { dummyCourses } from "../assets/assets";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
@@ -48,6 +47,8 @@ export const AppContextProvider = (props) => {
             const token = await getToken();
 
             const {data} = await axios.get(backendUrl + '/api/user/data',{headers:{Authorization:`Bearer ${token}`}})
+
+            console.log("dita", data)
             
             if(data.success){
                 
@@ -113,9 +114,9 @@ export const AppContextProvider = (props) => {
          console.log("first=>", data)
  
          if(data.success){
-             setEnrolledCourses(data.enrolledCourses.reverse())
+            setEnrolledCourses([...data.enrolledCourses].reverse());
          }else{
-             toast.error(data.message)
+             toast.error("wow nice")
          }
        } catch (error) {
         toast.error(error.message)

@@ -14,6 +14,7 @@ import StudentsEnrolled from './pages/educator/StudentsEnrolled'
 import Navbar from './components/student/Navbar'
 import "quill/dist/quill.snow.css";
 import {ToastContainer} from 'react-toastify'
+import LiveClass from './pages/educator/LiveClass'
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/my-enrollments" element={<MyEnrollments/>} />
           <Route path="/player/:courseId" element={<Player/>} />
           <Route path="/loading/:path" element={<Loading/>} />
+          <Route path='/live-class' element={<LiveClass/>}/>
 
           <Route path='/educator' element={<Educator />} >
             <Route path='/educator' element={<Dashboard/>}/>
